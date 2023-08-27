@@ -16,6 +16,8 @@ import com.pharma.exception.PatientNotFoundException;
 import com.pharma.model.Medicine;
 import com.pharma.model.Order;
 import com.pharma.model.Patient;
+
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 @Component
 public class PharmacyServiceImpl implements IPharmacyService {
 
@@ -60,6 +62,7 @@ public class PharmacyServiceImpl implements IPharmacyService {
 	}
 
 	@Override
+	@CircuitBreaker(name="pharmacyCircuitBreaker",fallbackMethod="fallbackMethod")
 	public Order createOrder(Long patientId, Long medicineId, int quantity) {
 		ResponseEntity<Patient> patient = restTemplate.getForEntity(getBaseUrlPatient() + "/" + patientId,
 				Patient.class);
@@ -80,6 +83,7 @@ public class PharmacyServiceImpl implements IPharmacyService {
 	}
 
 	@Override
+	@CircuitBreaker(name="pharmacyCircuitBreaker",fallbackMethod="fallbackMethod")
 	public Order updateOrder(Long id, Long patientId, Long medicineId, int quantity) {
 		ResponseEntity<Patient> patient = restTemplate.getForEntity(getBaseUrlPatient() + "/" + patientId,
 				Patient.class);
@@ -109,6 +113,10 @@ public class PharmacyServiceImpl implements IPharmacyService {
 		} else {
 			throw new OrderNotFoundException("No order with id: "+id);
 		}
+	}
+	
+	public String fallbackMethod(Exception e) {
+		return "Fallback: Service not available";
 	}
 
 }
