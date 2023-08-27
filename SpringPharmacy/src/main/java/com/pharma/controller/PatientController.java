@@ -57,13 +57,8 @@ public class PatientController {
 	public ResponseEntity<Patient> updatePatient(@PathVariable Long id, @Valid @RequestBody Patient patient) {
 		Patient existingPatient = patientDao.getPatientById(id);
 		if (existingPatient != null) {
-			existingPatient.setFirstName(patient.getFirstName());
-			existingPatient.setLastName(patient.getLastName());
-			existingPatient.setEmail(patient.getEmail());
-			existingPatient.setContact(patient.getContact());
-			existingPatient.setAge(patient.getAge());
-			existingPatient.setGender(patient.getGender());
-			Patient updatedPatient = patientDao.updatePatient(existingPatient);
+			patient.setId(id);
+			Patient updatedPatient = patientDao.updatePatient(patient);
 			return ResponseEntity.ok(updatedPatient);
 		} else {
 			throw new PatientNotFoundException("No patient exist with id " + id);
