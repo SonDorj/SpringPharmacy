@@ -12,14 +12,14 @@ import org.springframework.util.StopWatch;
 @Aspect
 @Component
 public class LoggingHandler {
-
+	
 	Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Around("execution(* com.pharma..*(..)))")
 	public Object profileAllMethods(ProceedingJoinPoint proceedingJoinPoint) throws Throwable 
     {
         MethodSignature methodSignature = (MethodSignature) proceedingJoinPoint.getSignature();
-          
+        
         //Get intercepted method details
         String className = methodSignature.getDeclaringType().getSimpleName();
         String methodName = methodSignature.getName();

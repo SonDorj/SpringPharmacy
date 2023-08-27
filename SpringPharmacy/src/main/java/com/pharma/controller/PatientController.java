@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.pharma.dao.PatientDao;
 import com.pharma.exception.PatientNotFoundException;
 import com.pharma.model.Patient;
+import com.pharma.service.KafkaSender;
 
 import jakarta.validation.Valid;
 
@@ -25,6 +26,8 @@ import jakarta.validation.Valid;
 @RequestMapping("/patient")
 public class PatientController {
 	private final PatientDao patientDao;
+	@Autowired
+	KafkaSender kafkaSender;
 
 	@Autowired
 	public PatientController(PatientDao patientDao) {
@@ -50,6 +53,7 @@ public class PatientController {
 	@Transactional
 	public ResponseEntity<Patient> createTask(@Valid @RequestBody Patient patient) {
 		Patient createdPatient = patientDao.createPatient(patient);
+		kafkaSender.send(patient.getFirstName()+" is created");
 		return ResponseEntity.status(HttpStatus.CREATED).body(createdPatient);
 	}
 
@@ -59,6 +63,7 @@ public class PatientController {
 		if (existingPatient != null) {
 			patient.setId(id);
 			Patient updatedPatient = patientDao.updatePatient(patient);
+			kafkaSender.send(updatedPatient.getFirstName()+" is updated");
 			return ResponseEntity.ok(updatedPatient);
 		} else {
 			throw new PatientNotFoundException("No patient exist with id " + id);
@@ -69,6 +74,7 @@ public class PatientController {
 	public ResponseEntity<Void> deletePatient(@PathVariable Long id) {
 		Patient patient = patientDao.getPatientById(id);
 		if (patient != null) {
+			kafkaSender.send(patient.getFirstName()+" is deleted");
 			patientDao.deletePatient(patient);
 			return ResponseEntity.noContent().build();
 		} else {

@@ -11,6 +11,10 @@ spring:
       dialect: org.hibernate.dialect.MySQL5Dialect
   application:
     name: PharmacyService
+  kafka:
+    producer:
+      bootstrap-servers:
+      - localhost:9092
 
 management:
   endpoints:

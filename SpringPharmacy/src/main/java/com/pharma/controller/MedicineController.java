@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.pharma.dao.MedicineDao;
 import com.pharma.exception.MedicineNotFoundException;
 import com.pharma.model.Medicine;
+import com.pharma.service.KafkaSender;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -26,7 +27,10 @@ import jakarta.validation.Valid;
 public class MedicineController {
 
     private final MedicineDao medicineDao;
-
+    
+    @Autowired
+    KafkaSender kafkaSender;
+    
     @Autowired
     public MedicineController(MedicineDao medicineDao) {
         this.medicineDao = medicineDao;
@@ -52,6 +56,7 @@ public class MedicineController {
     @Transactional
     public ResponseEntity<Medicine> createMedicine(@Valid @RequestBody Medicine medicine) {
         Medicine createdMedicine = medicineDao.createMedicine(medicine);
+        kafkaSender.send(medicine.getName()+" is created");
         return ResponseEntity.status(HttpStatus.CREATED).body(createdMedicine);
     }
 
@@ -62,6 +67,7 @@ public class MedicineController {
             existingMedicine.setName(medicine.getName());
             existingMedicine.setPrice(medicine.getPrice());
             Medicine updatedMedicine = medicineDao.updateMedicine(existingMedicine);
+            kafkaSender.send(updatedMedicine.getName()+" is updated");
             return ResponseEntity.ok(updatedMedicine);
         } else {
             throw new MedicineNotFoundException("No Medicine with id "+id);
@@ -72,6 +78,7 @@ public class MedicineController {
     public ResponseEntity<Void> deleteMedicine(@PathVariable Long id) {
         Medicine medicine = medicineDao.getMedicineById(id);
         if (medicine != null) {
+        	kafkaSender.send(medicine.getName()+ " is deleted");
             medicineDao.deleteMedicine(medicine);
             return ResponseEntity.noContent().build();
         } else {
