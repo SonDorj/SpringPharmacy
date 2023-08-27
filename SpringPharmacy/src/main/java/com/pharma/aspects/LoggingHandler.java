@@ -1,4 +1,4 @@
-package demo.spring.aspects;
+package com.pharma.aspects;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -34,7 +34,7 @@ public class LoggingHandler {
         //Log method execution time
         log.info("Execution time of " + className + "." + methodName + " "
                             + ":: " + stopWatch.getTotalTimeNanos() + " nano");
-  
+        
         return result;
     }
 	

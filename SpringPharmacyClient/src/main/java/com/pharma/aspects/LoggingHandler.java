@@ -1,4 +1,4 @@
-package demo.spring.aspects;
+package com.pharma.aspects;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -13,7 +13,7 @@ import org.springframework.util.StopWatch;
 @Component
 public class LoggingHandler {
 
-	Logger log = LoggerFactory.getLogger(this.getClass());
+	private static final Logger LOGGER = LoggerFactory.getLogger(LoggingHandler.class);
 
 	@Around("execution(* com.pharma..*(..)))")
 	public Object profileAllMethods(ProceedingJoinPoint proceedingJoinPoint) throws Throwable 
@@ -32,7 +32,7 @@ public class LoggingHandler {
         stopWatch.stop();
   
         //Log method execution time
-        log.info("Execution time of " + className + "." + methodName + " "
+        LOGGER.info("Execution time of " + className + "." + methodName + " "
                             + ":: " + stopWatch.getTotalTimeNanos() + " nano");
   
         return result;
