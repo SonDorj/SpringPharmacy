@@ -20,9 +20,20 @@ public class PatientDao{
         return entityManager.createQuery("SELECT p FROM Patient p", Patient.class).getResultList();
     }
     
+    public Patient getPatientById(Long id) {
+    	return entityManager.find(Patient.class,id);
+    }
+    
     public Patient createPatient(Patient patient) {
         entityManager.persist(patient);
         return patient;
     }
-
+    
+    public Patient updatePatient(Patient patient) {
+    	return entityManager.merge(patient);
+    }
+    
+    public void deletePatient(Patient patient) {
+    	entityManager.remove(patient);
+    }
 }

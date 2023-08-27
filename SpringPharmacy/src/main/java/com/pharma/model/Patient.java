@@ -39,9 +39,6 @@ public class Patient {
 	@Pattern(regexp = "^[M|F|O]$", message="Gender should be M,F and O")
     private String gender;
     
-    @Min(1)
-    private int quantity;
-   
 	public Patient() {
 		super();
 	}
@@ -49,7 +46,7 @@ public class Patient {
 	public Patient(Long id, @NotNull @Size(min = 0, max = 30) String firstName, String lastName,
 			@NotNull @Email(message = "Please provide valid email") String email,
 			@NotNull @Pattern(regexp = "^\\d{10}$", message = "Please provide ten digits") String contact,
-			@Min(1) int age, @Pattern(regexp = "^[M|F|O]$", message="Gender should be M,F and O") String gender, @Min(1) int quantity) {
+			@Min(1) int age, @Pattern(regexp = "^[M|F|O]$", message="Gender should be M,F and O") String gender) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
@@ -58,7 +55,6 @@ public class Patient {
 		this.contact = contact;
 		this.age = age;
 		this.gender = gender;
-		this.quantity = quantity;
 	}
 
 	public Long getId() {
@@ -117,18 +113,10 @@ public class Patient {
 		this.gender = gender;
 	}
 
-	public int getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
-	}
-
 	@Override
 	public String toString() {
 		return "Patient [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
-				+ ", contact=" + contact + ", age=" + age + ", gender=" + gender + ", quantity=" + quantity + "]";
+				+ ", contact=" + contact + ", age=" + age + ", gender=" + gender + "]";
 	}
 	
 }
