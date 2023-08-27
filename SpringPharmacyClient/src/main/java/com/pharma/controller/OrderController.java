@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pharma.dao.OrderDao;
+import com.pharma.exception.OrderNotFoundException;
 import com.pharma.model.Order;
 import com.pharma.service.PharmacyServiceImpl;
 
@@ -34,8 +35,8 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<Order> createOrder(@RequestParam(name="patientId") Long patientId,@RequestParam(name="medicineId") Long medicineId ) {
-        Order createdOrder = pharmacyServiceImpl.createOrder(patientId,medicineId);
+    public ResponseEntity<Order> createOrder(@RequestParam(name="patientId") Long patientId,@RequestParam(name="medicineId") Long medicineId,@RequestParam(name="quantity") int quantity) {
+        Order createdOrder = pharmacyServiceImpl.createOrder(patientId,medicineId,quantity);
         return ResponseEntity.ok(createdOrder);
     }
 
@@ -45,18 +46,18 @@ public class OrderController {
         if (order != null) {
             return ResponseEntity.ok(order);
         } else {
-            return ResponseEntity.notFound().build();
+        	throw new OrderNotFoundException("No order with id: "+id);
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Order> updateOrder(@PathVariable Long id, @RequestParam(name="patientId") Long patientId,@RequestParam(name="medicineId") Long medicineId ) {
+    public ResponseEntity<Order> updateOrder(@PathVariable Long id, @RequestParam(name="patientId") Long patientId,@RequestParam(name="medicineId") Long medicineId,@RequestParam(name="quanttiy") int quantity) {
         Order existingOrder = pharmacyServiceImpl.getOrderById(id);
         if (existingOrder != null) {
-            Order updatedOrder = pharmacyServiceImpl.updateOrder(id,patientId,medicineId);
+            Order updatedOrder = pharmacyServiceImpl.updateOrder(id,patientId,medicineId,quantity);
             return ResponseEntity.ok(updatedOrder);
         } else {
-            return ResponseEntity.notFound().build();
+        	throw new OrderNotFoundException("No order with id: "+id);
         }
     }
 
@@ -66,7 +67,7 @@ public class OrderController {
         if (order != null) {
             return ResponseEntity.noContent().build();
         } else {
-            return ResponseEntity.notFound().build();
+        	throw new OrderNotFoundException("No order with id: "+id);
         }
     }
 }

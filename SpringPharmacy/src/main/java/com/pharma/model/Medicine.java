@@ -21,25 +21,20 @@ public class Medicine {
 	@Min(1)
     private int price;
 	
-	@Min(1)
-    private int stock;
-	
     public Medicine() {
 		super();
 	}
-    public Medicine( @NotNull @Size(min = 0, max = 50) String name, @Min(1) int price, @Min(1) int stock) {
+    public Medicine( @NotNull @Size(min = 0, max = 50) String name, @Min(1) int price) {
 		super();
 		this.name = name;
 		this.price = price;
-		this.stock = stock;
 	}
 
-	public Medicine(Long id, @NotNull @Size(min = 0, max = 50) String name, @Min(1) int price, @Min(1) int stock) {
+	public Medicine(Long id, @NotNull @Size(min = 0, max = 50) String name, @Min(1) int price) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.price = price;
-		this.stock = stock;
 	}
 
 	public Long getId() {
@@ -66,17 +61,10 @@ public class Medicine {
 		this.price = price;
 	}
 
-	public int getStock() {
-		return stock;
-	}
-
-	public void setStock(int stock) {
-		this.stock = stock;
-	}
 
 	@Override
 	public String toString() {
-		return "Medicine [id=" + id + ", name=" + name + ", price=" + price + ", stock=" + stock + "]";
+		return "Medicine [id=" + id + ", name=" + name + ", price=" + price + "]";
 	}
     
 }

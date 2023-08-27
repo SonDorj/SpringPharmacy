@@ -8,6 +8,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import com.pharma.dao.OrderDao;
+import com.pharma.exception.MedicineNotFoundException;
+import com.pharma.exception.OrderNotFoundException;
+import com.pharma.exception.PatientNotFoundException;
 import com.pharma.model.Medicine;
 import com.pharma.model.Order;
 import com.pharma.model.Patient;
@@ -43,12 +46,12 @@ public class PharmacyServiceImpl implements IPharmacyService {
 		if (order != null) {
 			return order;
 		} else {
-			return null;
+			throw new OrderNotFoundException("No order with id: "+id);
 		}
 	}
 
 	@Override
-	public Order createOrder(Long patientId, Long medicineId) {
+	public Order createOrder(Long patientId, Long medicineId, int quantity) {
 		ResponseEntity<Patient> patient = restTemplate.getForEntity(getBaseUrlPatient() + "/" + patientId,
 				Patient.class);
 		ResponseEntity<Medicine> medicine = restTemplate.getForEntity(getBaseUrlMedicine() + "/" + medicineId,
@@ -57,15 +60,18 @@ public class PharmacyServiceImpl implements IPharmacyService {
 			Order order = new Order();
 			order.setPatient(patient.getBody());
 			order.setMedicine(medicine.getBody());
+			order.setQuantity(quantity);
 			Order createdOrder = orderDao.createOrder(order);
 			return createdOrder;
+		} else if(patient!=null) {
+			throw new PatientNotFoundException("patient doesn't exist");
 		} else {
-			return null;
+			throw new MedicineNotFoundException("Medicine doesn't exist");
 		}
 	}
 
 	@Override
-	public Order updateOrder(Long id, Long patientId, Long medicineId) {
+	public Order updateOrder(Long id, Long patientId, Long medicineId, int quantity) {
 		ResponseEntity<Patient> patient = restTemplate.getForEntity(getBaseUrlPatient() + "/" + patientId,
 				Patient.class);
 		ResponseEntity<Medicine> medicine = restTemplate.getForEntity(getBaseUrlMedicine() + "/" + medicineId,
@@ -74,11 +80,14 @@ public class PharmacyServiceImpl implements IPharmacyService {
 			Order order = new Order();
 			order.setPatient(patient.getBody());
 			order.setMedicine(medicine.getBody());
+			order.setQuantity(quantity);
 			order.setId(id);
 			Order updatedOrder = orderDao.updateOrder(order);
 			return updatedOrder;
+		} else if(patient!=null) {
+			throw new PatientNotFoundException("patient doesn't exist");
 		} else {
-			return null;
+			throw new MedicineNotFoundException("Medicine doesn't exist");
 		}
 	}
 
@@ -89,7 +98,7 @@ public class PharmacyServiceImpl implements IPharmacyService {
 			orderDao.deleteOrder(order);
 			return order;
 		} else {
-			return null;
+			throw new OrderNotFoundException("No order with id: "+id);
 		}
 	}
 

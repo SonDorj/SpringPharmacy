@@ -10,9 +10,9 @@ public interface IPharmacyService {
 
     Order getOrderById(Long id);
 
-    Order createOrder(Long patientId, Long medicineId);
+    Order createOrder(Long patientId, Long medicineId, int quantity);
 
-    Order updateOrder(Long id, Long patientId, Long medicineId);
+    Order updateOrder(Long id, Long patientId, Long medicineId, int quantity);
 
     Order deleteOrder(Long id);
 }

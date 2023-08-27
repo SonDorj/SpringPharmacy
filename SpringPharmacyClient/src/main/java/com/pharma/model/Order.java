@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
 
 @Entity
 @Table(name = "prescription")
@@ -23,13 +24,17 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "medicine_id")
     private Medicine medicine;
+    
+    @Min(1)
+    private int quantity;
 
     public Order() {
     }
 
-    public Order(Patient patient, Medicine medicine) {
+    public Order(Patient patient, Medicine medicine, int quantity) {
         this.patient = patient;
         this.medicine = medicine;
+        this.quantity = quantity;
     }
 
     public Long getId() {
@@ -56,9 +61,17 @@ public class Order {
         this.medicine = medicine;
     }
 
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
 	@Override
 	public String toString() {
-		return "Order [id=" + id + ", patient=" + patient + ", medicine=" + medicine + "]";
+		return "Order [id=" + id + ", patient=" + patient + ", medicine=" + medicine + ", quantity=" + quantity + "]";
 	}
     
 }

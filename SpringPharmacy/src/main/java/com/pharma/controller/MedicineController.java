@@ -61,7 +61,6 @@ public class MedicineController {
         if (existingMedicine != null) {
             existingMedicine.setName(medicine.getName());
             existingMedicine.setPrice(medicine.getPrice());
-            existingMedicine.setStock(medicine.getStock());
             Medicine updatedMedicine = medicineDao.updateMedicine(existingMedicine);
             return ResponseEntity.ok(updatedMedicine);
         } else {
