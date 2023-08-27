@@ -44,7 +44,7 @@ public class MedicineController {
         if (medicine != null) {
             return ResponseEntity.ok(medicine);
         } else {
-            throw new MedicineNotFoundException(null);
+            throw new MedicineNotFoundException("No Medicine with id "+id);
         }
     }
 
@@ -65,7 +65,7 @@ public class MedicineController {
             Medicine updatedMedicine = medicineDao.updateMedicine(existingMedicine);
             return ResponseEntity.ok(updatedMedicine);
         } else {
-            throw new MedicineNotFoundException(null);
+            throw new MedicineNotFoundException("No Medicine with id "+id);
         }
     }
 
@@ -76,7 +76,7 @@ public class MedicineController {
             medicineDao.deleteMedicine(medicine);
             return ResponseEntity.noContent().build();
         } else {
-            throw new MedicineNotFoundException(null);
+            throw new MedicineNotFoundException("No Medicine with id "+id);
         }
     }
 }

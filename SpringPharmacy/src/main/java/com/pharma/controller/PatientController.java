@@ -41,7 +41,7 @@
 			if(patient!=null)
 				return ResponseEntity.ok(patient);
 			else
-				throw new PatientNotFoundException(null);
+				throw new PatientNotFoundException("No patient exist with id "+id);
 		}
 		
 		@PostMapping
@@ -64,7 +64,7 @@
 				Patient updatedPatient = patientDao.updatePatient(existingPatient);
 				return ResponseEntity.ok(updatedPatient);
 			} else {
-				throw new PatientNotFoundException(null);
+				throw new PatientNotFoundException("No patient exist with id "+id);
 			}
 		}
 		
@@ -75,7 +75,7 @@
 				patientDao.deletePatient(patient);
 				return ResponseEntity.noContent().build();
 			} else {
-				throw new PatientNotFoundException(null);
+				throw new PatientNotFoundException("No patient exist with id "+id);
 			}
 		}
 	}
