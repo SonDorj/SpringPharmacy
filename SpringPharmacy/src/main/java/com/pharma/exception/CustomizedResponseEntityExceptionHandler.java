@@ -30,6 +30,13 @@ GenericExceptionResponse  genericExceptionResponse = new GenericExceptionRespons
 return new ResponseEntity<Object>(genericExceptionResponse , HttpStatus.NOT_FOUND);
 }
 
+@ExceptionHandler(MedicineNotFoundException.class)
+public final ResponseEntity<Object>   handleCustomerNotFoundException (MedicineNotFoundException ex, WebRequest request)
+{
+GenericExceptionResponse  genericExceptionResponse = new GenericExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
+return new ResponseEntity<Object>(genericExceptionResponse , HttpStatus.NOT_FOUND);
+}
+
 @ExceptionHandler(EmptyResultDataAccessException.class)
 public ResponseEntity<String> noCityFound(DataAccessException e) {
 
