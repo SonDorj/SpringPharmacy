@@ -11,7 +11,9 @@ spring:
       dialect: org.hibernate.dialect.MySQL5Dialect
   application:
     name: ClientService
-
+  main:
+    allow-circular-references: true
+    
 management:
   endpoints:
     web:
@@ -37,5 +39,4 @@ resilience4j.circuitbreaker:
       waitDurationInOpenState: 10
       failureRateThreshold: 60
       registerHealthIndicator: true
-      
       

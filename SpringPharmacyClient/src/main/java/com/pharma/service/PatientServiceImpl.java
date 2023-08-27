@@ -67,8 +67,8 @@ public class PatientServiceImpl implements IPatientService {
         return ResponseEntity.ok().build();
 	}
 	
-	public String fallbackMethod(Exception e) {
-		return "Fallback: Service not available";
+	public ResponseEntity<Void> fallbackMethod(Throwable t) {
+		return ResponseEntity.notFound().build();
 	}
 
 }
