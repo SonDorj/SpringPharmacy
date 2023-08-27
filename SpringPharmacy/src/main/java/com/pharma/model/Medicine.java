@@ -27,6 +27,12 @@ public class Medicine {
     public Medicine() {
 		super();
 	}
+    public Medicine( @NotNull @Size(min = 0, max = 50) String name, @Min(1) int price, @Min(1) int stock) {
+		super();
+		this.name = name;
+		this.price = price;
+		this.stock = stock;
+	}
 
 	public Medicine(Long id, @NotNull @Size(min = 0, max = 50) String name, @Min(1) int price, @Min(1) int stock) {
 		super();

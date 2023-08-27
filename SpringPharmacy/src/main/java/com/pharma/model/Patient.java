@@ -42,7 +42,19 @@ public class Patient {
 	public Patient() {
 		super();
 	}
-
+	public Patient( @NotNull @Size(min = 0, max = 30) String firstName, String lastName,
+			@NotNull @Email(message = "Please provide valid email") String email,
+			@NotNull @Pattern(regexp = "^\\d{10}$", message = "Please provide ten digits") String contact,
+			@Min(1) int age, @Pattern(regexp = "^[M|F|O]$", message="Gender should be M,F and O") String gender) {
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.contact = contact;
+		this.age = age;
+		this.gender = gender;
+	}
+	
 	public Patient(Long id, @NotNull @Size(min = 0, max = 30) String firstName, String lastName,
 			@NotNull @Email(message = "Please provide valid email") String email,
 			@NotNull @Pattern(regexp = "^\\d{10}$", message = "Please provide ten digits") String contact,
