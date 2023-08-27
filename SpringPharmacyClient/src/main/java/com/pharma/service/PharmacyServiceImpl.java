@@ -3,6 +3,8 @@ package com.pharma.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -25,13 +27,20 @@ public class PharmacyServiceImpl implements IPharmacyService {
 		this.restTemplate = restTemplate;
 		this.orderDao = orderdao;
 	}
-
-	private String getBaseUrlPatient() {
-		return "http://localhost:8080/patient";
-	}
+	
+	@Autowired
+    private DiscoveryClient discoveryClient;
+    
+    private String  getBaseUrlPatient(){
+    	List<ServiceInstance> instances = discoveryClient.getInstances("PharmacyService");
+    	String url = instances.get(0).getUri().toString();
+        return url+"/patient"; 
+    }
 
 	private String getBaseUrlMedicine() {
-		return "http://localhost:8080/medicine";
+		List<ServiceInstance> instances = discoveryClient.getInstances("PharmacyService");
+    	String url = instances.get(0).getUri().toString();
+        return url+"/medicine"; 
 	}
 
 	@Override

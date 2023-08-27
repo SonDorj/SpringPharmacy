@@ -3,6 +3,8 @@ package com.pharma.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -20,9 +22,14 @@ public class PatientServiceImpl implements IPatientService {
     public PatientServiceImpl(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
-
+    
+    @Autowired
+    private DiscoveryClient discoveryClient;
+    
     private String getBaseUrl() {
-        return "http://localhost:8080/patient"; // Change this URL based on your service endpoint
+    	List<ServiceInstance> instances = discoveryClient.getInstances("PharmacyService");
+    	String url = instances.get(0).getUri().toString();
+        return url+"/patient"; // Change this URL based on your service endpoint
     }
     
 	@Override
