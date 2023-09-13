@@ -6,3 +6,8 @@
    C:/kafka_2.12-3.5.1/bin/windows/kafka-server-start.bat  C:/kafka_2.12-3.5.1/config/server.properties
 - Creating the kafka topic pharmacy-messages <br>
    C:/kafka_2.12-3.5.1/bin/windows/kafka-topics.bat --bootstrap-server localhost:9092 --create --topic pharmacy-messages --partitions 1
+
+## Postman URLs
+https://www.postman.com/ruthyuri/workspace/pharmacyz
+
+## Eureka Port: 8761
