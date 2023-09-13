@@ -62,7 +62,7 @@ public class PharmacyServiceImpl implements IPharmacyService {
 	}
 
 	@Override
-	@CircuitBreaker(name="pharmacyCircuitBreaker",fallbackMethod="fallbackMethod")
+	@CircuitBreaker(name="pharmacyCircuitBreaker",fallbackMethod="createFallbackMethod")
 	public Order createOrder(Long patientId, Long medicineId, int quantity) {
 		ResponseEntity<Patient> patient = restTemplate.getForEntity(getBaseUrlPatient() + "/" + patientId,
 				Patient.class);
@@ -81,9 +81,12 @@ public class PharmacyServiceImpl implements IPharmacyService {
 			throw new MedicineNotFoundException("Medicine doesn't exist");
 		}
 	}
+	public Order createFallbackMethod(Long patientId, Long medicineId, int quantity, Exception e) {
+		return null;
+	}
 
 	@Override
-	@CircuitBreaker(name="pharmacyCircuitBreaker",fallbackMethod="fallbackMethod")
+	@CircuitBreaker(name="pharmacyCircuitBreaker",fallbackMethod="updateFallbackMethod")
 	public Order updateOrder(Long id, Long patientId, Long medicineId, int quantity) {
 		ResponseEntity<Patient> patient = restTemplate.getForEntity(getBaseUrlPatient() + "/" + patientId,
 				Patient.class);
@@ -103,6 +106,9 @@ public class PharmacyServiceImpl implements IPharmacyService {
 			throw new MedicineNotFoundException("Medicine doesn't exist");
 		}
 	}
+	public Order updateFallbackMethod(Long id, Long patientId, Long medicineId, int quantity, Exception e) {
+		return null;
+	}
 
 	@Override
 	public Order deleteOrder(Long id) {
@@ -113,9 +119,5 @@ public class PharmacyServiceImpl implements IPharmacyService {
 		} else {
 			throw new OrderNotFoundException("No order with id: "+id);
 		}
-	}
-	
-	public ResponseEntity<Void> fallbackMethod(Throwable t) {
-		return ResponseEntity.notFound().build();
 	}
 }
